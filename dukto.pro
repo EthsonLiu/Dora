@@ -17,3 +17,6 @@ SOURCES += \
 HEADERS += \
     src/main_window.h
 
+RESOURCES += \
+    image/image.qrc
+
