@@ -39,7 +39,7 @@ void MainWindow::createMenuBar()
     duktoMenu->addAction(aboutAction);
 }
 
-QWidget *MainWindow::createMainWidget()
+QWidget* MainWindow::createMainWidget()
 {
     QWidget* mainWidget = new QWidget(this);
 
