@@ -4,9 +4,10 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    setWindowTitle("Dukto 7.0.0");
+    setWindowTitle("Dukto");
 
     createPreferenceDialog();
+    createAboutDialog();
     createMenuBar();
     setCentralWidget(createMainWidget());
 }
@@ -17,12 +18,25 @@ void MainWindow::createPreferenceDialog()
     m_preferenceDialog->setWindowTitle(tr("Preference"));
 }
 
+void MainWindow::createAboutDialog()
+{
+    m_aboutDialog = new QDialog(this);
+    m_aboutDialog->setWindowTitle(tr("About"));
+}
+
 void MainWindow::createMenuBar()
 {
-    QMenu* fileMenu = menuBar()->addMenu(tr("File"));
-    QAction* preferenceAction = new QAction(tr("Preference"), fileMenu);
-    fileMenu->addAction(preferenceAction);
+    QMenu* duktoMenu = menuBar()->addMenu(tr("Dukto"));
+
+    QAction* preferenceAction = new QAction(tr("Preference"), duktoMenu);
     connect(preferenceAction, &QAction::triggered, m_preferenceDialog, &QDialog::exec);
+
+    QAction* aboutAction = new QAction(tr("About"), duktoMenu);
+    connect(aboutAction, &QAction::triggered, m_aboutDialog, &QDialog::exec);
+
+    duktoMenu->addAction(preferenceAction);
+    duktoMenu->addSeparator();
+    duktoMenu->addAction(aboutAction);
 }
 
 QWidget *MainWindow::createMainWidget()
