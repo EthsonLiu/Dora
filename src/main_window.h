@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMenuBar>
 #include <QDialog>
+#include <QSystemTrayIcon>
+#include <QCloseEvent>
 
 class MainWindow : public QMainWindow
 {
@@ -13,20 +14,28 @@ public:
 
     MainWindow(QWidget *parent = nullptr);
 
+protected:
+
+    virtual void closeEvent(QCloseEvent* event);
+
 private slots:
 
+    void systemTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
 
+    void createUpdatesCheckingDialog();
+    QWidget* createGeneralWidget();
     void createPreferenceDialog();
     void createAboutDialog();
-    void createMenuBar();
+    void createSystemTray();
     QWidget* createMainWidget();
 
 private:
 
     QDialog* m_preferenceDialog;
     QDialog* m_aboutDialog;
+    QDialog* m_updatesCheckingDialog;
 
 };
 #endif // MAINWINDOW_H
