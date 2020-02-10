@@ -21,6 +21,7 @@ protected:
 private slots:
 
     void systemTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void exitApplication();
 
 private:
 

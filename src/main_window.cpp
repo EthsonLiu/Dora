@@ -1,5 +1,6 @@
 #include "main_window.h"
 
+#include <QApplication>
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
@@ -39,6 +40,11 @@ void MainWindow::systemTrayIconActivated(QSystemTrayIcon::ActivationReason reaso
     default:
         break;
     }
+}
+
+void MainWindow::exitApplication()
+{
+    qApp->quit();
 }
 
 void MainWindow::createUpdatesCheckingDialog()
@@ -95,12 +101,17 @@ void MainWindow::createSystemTray()
     QAction* aboutAction = new QAction(tr("About"), systemTrayContextMenu);
     connect(aboutAction, &QAction::triggered, m_aboutDialog, &QDialog::exec);
 
+    QAction* quitAction = new QAction(tr("Quit Dukto"), systemTrayContextMenu);
+    connect(quitAction, &QAction::triggered, this, &MainWindow::exitApplication);
+
     systemTrayContextMenu->addAction(showAppAction);
     systemTrayContextMenu->addSeparator();
     systemTrayContextMenu->addAction(preferenceAction);
     systemTrayContextMenu->addAction(checkUpdatesAction);
     systemTrayContextMenu->addSeparator();
     systemTrayContextMenu->addAction(aboutAction);
+    systemTrayContextMenu->addSeparator();
+    systemTrayContextMenu->addAction(quitAction);
 }
 
 QWidget* MainWindow::createMainWidget()
