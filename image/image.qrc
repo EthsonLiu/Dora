@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>dukto.ico</file>
-        <file>dukto.icns</file>
     </qresource>
 </RCC>

@@ -1,4 +1,8 @@
-#include "main_window.h"
+#include "preference_widget.h"
+#include "about_widget.h"
+#include "updates_checking_widget.h"
+#include "system_tray_widget.h"
+#include "dukto_widget.h"
 
 #include <QApplication>
 #include <QtSingleApplication>
@@ -13,7 +17,19 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    MainWindow w;
-    w.show();
+    a.setQuitOnLastWindowClosed(false);
+
+    AboutWidget aboutWidget;
+    PreferenceWidget preferenceWidget;
+    UpdatesCheckingWidget updatesCheckingWidget;
+    SystemTrayWidget systemTrayWidget;
+
+    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showAboutSignal, &aboutWidget, &AboutWidget::show);
+    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showPreferenceSignal, &preferenceWidget, &PreferenceWidget::show);
+    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showUpdatesCheckingSignal, &updatesCheckingWidget, &UpdatesCheckingWidget::show);
+
+    DuktoWidget duktoWidget;
+    duktoWidget.show();
+
     return a.exec();
 }

@@ -15,11 +15,19 @@ win32:RC_ICONS = image/dukto.ico
 unix:RC_ICONS = image/dukto.ico
 
 SOURCES += \
+    src/about_widget.cpp \
+    src/dukto_widget.cpp \
     src/main.cpp \
-    src/main_window.cpp
+    src/preference_widget.cpp \
+    src/system_tray_widget.cpp \
+    src/updates_checking_widget.cpp
 
 HEADERS += \
-    src/main_window.h
+    src/about_widget.h \
+    src/dukto_widget.h \
+    src/preference_widget.h \
+    src/system_tray_widget.h \
+    src/updates_checking_widget.h
 
 RESOURCES += \
     image/image.qrc
