@@ -11,7 +11,7 @@
 #include <QTabWidget>
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
     setWindowTitle("Dukto");
 
