@@ -42,11 +42,6 @@ void MainWindow::systemTrayIconActivated(QSystemTrayIcon::ActivationReason reaso
     }
 }
 
-void MainWindow::exitApplication()
-{
-    qApp->quit();
-}
-
 void MainWindow::createUpdatesCheckingDialog()
 {
     m_updatesCheckingDialog = new QDialog(this);
@@ -102,7 +97,7 @@ void MainWindow::createSystemTray()
     connect(aboutAction, &QAction::triggered, m_aboutDialog, &QDialog::exec);
 
     QAction* quitAction = new QAction(tr("Quit Dukto"), systemTrayContextMenu);
-    connect(quitAction, &QAction::triggered, this, &MainWindow::exitApplication);
+    connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
 
     systemTrayContextMenu->addAction(showAppAction);
     systemTrayContextMenu->addSeparator();
