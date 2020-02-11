@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    /** Check for single running instance */
+    /** check for single running instance */
     QtSingleApplication a(argc, argv);
     if (a.isRunning())
     {
