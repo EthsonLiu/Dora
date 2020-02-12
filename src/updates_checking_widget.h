@@ -20,6 +20,8 @@
 #ifndef SRC_UPDATES_CHECKING_WIDGET_H
 #define SRC_UPDATES_CHECKING_WIDGET_H
 
+#include "src/config.h"
+
 #include <QWidget>
 
 class UpdatesCheckingWidget : public QWidget

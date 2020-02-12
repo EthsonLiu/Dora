@@ -17,25 +17,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef SRC_PREFERENCE_WIDGET_H
-#define SRC_PREFERENCE_WIDGET_H
+#ifndef SRC_CONFIG_H
+#define SRC_CONFIG_H
 
-#include <src/config.h>
+#include <QDebug>
 
-#include <QWidget>
-
-class PreferenceWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-
-    PreferenceWidget(QWidget* parent = nullptr);
-
-private:
-
-    QWidget* createGeneralWidget();
-
-};
-
-#endif /** SRC_PREFERENCE_WIDGET_H */
+#endif /** SRC_CONFIG_H */

@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "system_tray_widget.h"
+#include "src/system_tray_widget.h"
 
 #include <QMenu>
 #include <QAction>

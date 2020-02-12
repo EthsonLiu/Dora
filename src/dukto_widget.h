@@ -20,6 +20,8 @@
 #ifndef SRC_DUKTO_WIDGET_H
 #define SRC_DUKTO_WIDGET_H
 
+#include "src/config.h"
+
 #include <QWidget>
 
 class DuktoWidget : public QWidget

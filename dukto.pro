@@ -24,6 +24,7 @@ SOURCES += \
 
 HEADERS += \
     src/about_widget.h \
+    src/config.h \
     src/dukto_widget.h \
     src/preference_widget.h \
     src/system_tray_widget.h \

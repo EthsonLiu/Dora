@@ -20,6 +20,8 @@
 #ifndef SRC_SYSTEM_TRAY_WIDGET_H
 #define SRC_SYSTEM_TRAY_WIDGET_H
 
+#include "src/config.h"
+
 #include <QWidget>
 #include <QSystemTrayIcon>
 

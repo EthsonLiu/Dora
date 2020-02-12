@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "about_widget.h"
+#include "src/about_widget.h"
 
 AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
 {

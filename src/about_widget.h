@@ -20,6 +20,8 @@
 #ifndef ABOUTWIDGET_H
 #define ABOUTWIDGET_H
 
+#include "src/config.h"
+
 #include <QWidget>
 
 class AboutWidget : public QWidget
