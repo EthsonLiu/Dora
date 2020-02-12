@@ -19,6 +19,7 @@ SOURCES += \
     src/dukto_widget.cpp \
     src/main.cpp \
     src/preference_widget.cpp \
+    src/project.cpp \
     src/system_tray_widget.cpp \
     src/updates_checking_widget.cpp
 
@@ -27,6 +28,7 @@ HEADERS += \
     src/config.h \
     src/dukto_widget.h \
     src/preference_widget.h \
+    src/project.h \
     src/system_tray_widget.h \
     src/updates_checking_widget.h
 
