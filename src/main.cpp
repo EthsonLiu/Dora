@@ -1,4 +1,3 @@
-#include "preference_widget.h"
 #include "about_widget.h"
 #include "updates_checking_widget.h"
 #include "system_tray_widget.h"
@@ -20,15 +19,14 @@ int main(int argc, char *argv[])
     a.setQuitOnLastWindowClosed(false);
 
     AboutWidget aboutWidget;
-    PreferenceWidget preferenceWidget;
     UpdatesCheckingWidget updatesCheckingWidget;
     SystemTrayWidget systemTrayWidget;
+    DuktoWidget duktoWidget;
 
     QObject::connect(&systemTrayWidget, &SystemTrayWidget::showAboutSignal, &aboutWidget, &AboutWidget::show);
-    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showPreferenceSignal, &preferenceWidget, &PreferenceWidget::show);
     QObject::connect(&systemTrayWidget, &SystemTrayWidget::showUpdatesCheckingSignal, &updatesCheckingWidget, &UpdatesCheckingWidget::show);
+    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showPreferenceSignal, &duktoWidget, &DuktoWidget::showPreferenceWidget);
 
-    DuktoWidget duktoWidget;
     duktoWidget.show();
 
     return a.exec();

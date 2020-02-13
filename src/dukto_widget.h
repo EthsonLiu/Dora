@@ -21,6 +21,7 @@
 #define SRC_DUKTO_WIDGET_H
 
 #include "src/config.h"
+#include "src/preference_widget.h"
 
 #include <QWidget>
 
@@ -32,6 +33,13 @@ public:
 
     explicit DuktoWidget(QWidget* parent = nullptr);
 
+public slots:
+
+    void showPreferenceWidget();
+
+private:
+
+    PreferenceWidget m_preferenceWidget;
 };
 
 #endif /** SRC_DUKTO_WIDGET_H */

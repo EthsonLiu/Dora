@@ -26,3 +26,8 @@ DuktoWidget::DuktoWidget(QWidget* parent) : QWidget(parent)
     setWindowTitle("Dukto");
     setWindowIcon(QIcon(":/dukto.ico"));
 }
+
+void DuktoWidget::showPreferenceWidget()
+{
+    m_preferenceWidget.show();
+}
