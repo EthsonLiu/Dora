@@ -25,3 +25,8 @@ QString Project::applicationVersion()
 {
     return "7.0.0";
 }
+
+QString Project::applicationReleasedDate()
+{
+    return "2020.02.02";
+}

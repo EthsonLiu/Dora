@@ -30,6 +30,7 @@ class Project
 public:
 
     static QString applicationVersion();
+    static QString applicationReleasedDate();
 };
 
 #endif /** SRC_PROJECT_H */
