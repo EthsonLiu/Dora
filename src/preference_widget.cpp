@@ -23,28 +23,145 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QTabWidget>
+#include <QLabel>
+#include <QStringList>
+#include <QPushButton>
+#include <QDateTime>
+#include <QRandomGenerator>
+#include <QRegExpValidator>
+#include <QRegExp>
 
 PreferenceWidget::PreferenceWidget(QWidget* parent) : QWidget(parent)
 {
     setWindowTitle(tr("Preference"));
+    setFixedWidth(600);
 
-    QTabWidget* tabWidget = new QTabWidget(this);
-    tabWidget->addTab(createGeneralWidget(), tr("General"));
+    m_tabWidget = new QTabWidget(this);
+    connect(m_tabWidget, &QTabWidget::currentChanged, this, &PreferenceWidget::updateSizes);
+    m_tabWidget->addTab(createGeneralWidget(), tr("General"));
+    m_tabWidget->addTab(createBehaviorWidget(), tr("Behavior"));
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
-    hLayout->addWidget(tabWidget);
-    setLayout(hLayout);
+    hLayout->addWidget(m_tabWidget);
+}
+
+void PreferenceWidget::updateSizes(int index)
+{
+    for (int i = 0; i < m_tabWidget->count(); ++i)
+    {
+        if (i != index)
+        {
+            m_tabWidget->widget(i)->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        }
+    }
+
+    m_tabWidget->widget(index)->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_tabWidget->widget(index)->resize(m_tabWidget->widget(index)->minimumSizeHint());
+    m_tabWidget->widget(index)->adjustSize();
+    resize(minimumSizeHint());
+    adjustSize();
+}
+
+void PreferenceWidget::generateRandomCode()
+{
+    QRandomGenerator generator(static_cast<quint32>(QDateTime::currentSecsSinceEpoch()));
+
+    static const char candidates[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    static int candidatesSize = sizeof(candidates);
+
+    QString code;
+
+    for (int i = 0; i < 8; ++i)
+    {
+        code += candidates[generator.bounded(0, candidatesSize - 1)];
+    }
+
+    m_privateCodeLineEdit->setText(code);
 }
 
 QWidget* PreferenceWidget::createGeneralWidget()
 {
     QWidget* generalWidget = new QWidget;
 
-    QGroupBox* portGroupBox = new QGroupBox(tr("Port"), generalWidget);
+    QGroupBox* portGroupBox    = new QGroupBox(tr("Port"), generalWidget);
+    QLabel* broadcastPortLabel = new QLabel(tr("Broadcast port:"), portGroupBox);
+    QLabel* tranferPortLabel   = new QLabel(tr("Tranfer port:"), portGroupBox);
+    m_broadcastPortSpinBox     = new QSpinBox(portGroupBox);
+    m_tranferPortSpinBox       = new QSpinBox(portGroupBox);
+    m_broadcastPortSpinBox->setRange(0, 62235);
+    m_tranferPortSpinBox->setRange(0, 62235);
+    m_broadcastPortSpinBox->setValue(4644);
+    m_tranferPortSpinBox->setValue(4644);
+    QHBoxLayout* hLayout1 = new QHBoxLayout(portGroupBox);
+    hLayout1->addWidget(broadcastPortLabel);
+    hLayout1->addWidget(m_broadcastPortSpinBox);
+    hLayout1->addStretch();
+    hLayout1->addWidget(tranferPortLabel);
+    hLayout1->addWidget(m_tranferPortSpinBox);
 
-    QVBoxLayout* vLayout = new QVBoxLayout(generalWidget);
-    vLayout->addWidget(portGroupBox);
+    QGroupBox* langGroupBox = new QGroupBox(tr("Language (Restart required)"), generalWidget);
+    QLabel* langLabel       = new QLabel(tr("Language:"), this);
+    m_langComboBox          = new QComboBox(this);
+    m_langComboBox->addItems(QStringList() <<
+                             QString::fromLocal8Bit("English") <<
+                             QString::fromLocal8Bit("简体中文"));
+    QHBoxLayout* hLayout2 = new QHBoxLayout(langGroupBox);
+    hLayout2->addWidget(langLabel);
+    hLayout2->addWidget(m_langComboBox);
+    hLayout2->addStretch();
+
+    QGroupBox* historyGroupBox    = new QGroupBox(tr("History"), generalWidget);
+    QLabel* historySavedDaysLabel = new QLabel(tr("Max days of history record:"), historyGroupBox);
+    m_historySavedDaysSpinBox     = new QSpinBox(historyGroupBox);
+    m_historySavedDaysSpinBox->setValue(30);
+    m_historySavedDaysSpinBox->setRange(0, 365);
+    QHBoxLayout* hLayout3 = new QHBoxLayout(historyGroupBox);
+    hLayout3->addWidget(historySavedDaysLabel);
+    hLayout3->addWidget(m_historySavedDaysSpinBox);
+    hLayout3->addStretch();
+
+    QVBoxLayout* vLayout1 = new QVBoxLayout(generalWidget);
+    vLayout1->addWidget(portGroupBox);
+    vLayout1->addWidget(langGroupBox);
+    vLayout1->addWidget(historyGroupBox);
 
     return generalWidget;
+}
+
+QWidget* PreferenceWidget::createBehaviorWidget()
+{
+    QWidget* behaviorWidget = new QWidget;
+
+    QGroupBox* systemTrayGroupBox = new QGroupBox(tr("System Tray"), behaviorWidget);
+    m_enableMessageCheckBox       = new QCheckBox(tr("Enable balloon messages if received files or text"), systemTrayGroupBox);
+    m_enableMessageCheckBox->setChecked(true);
+    QHBoxLayout* hLayout1 = new QHBoxLayout(systemTrayGroupBox);
+    hLayout1->addWidget(m_enableMessageCheckBox);
+    hLayout1->addStretch();
+
+    QGroupBox* privateGroupBox     = new QGroupBox(tr("Enable Private LAN"), behaviorWidget);
+    QLabel* privateCodeLabel       = new QLabel(tr("Private code:"), privateGroupBox);
+    m_privateCodeLineEdit          = new QLineEdit(privateGroupBox);
+    QPushButton* generateBtn       = new QPushButton(tr("Generate"), privateGroupBox);
+    QRegExpValidator* regValidator = new QRegExpValidator(QRegExp("[A-Za-z0-9]{8}"), m_privateCodeLineEdit);
+    QLabel* tipLabel               = new QLabel(tr("*This allows people with the same private code to form a private LAN with you."), privateGroupBox);
+    m_privateCodeLineEdit->setValidator(regValidator);
+    m_privateCodeLineEdit->setPlaceholderText(tr("only support 8 digits or letters"));
+    privateGroupBox->setCheckable(true);
+    privateGroupBox->setChecked(false);
+    tipLabel->setEnabled(false);
+    connect(generateBtn, &QPushButton::clicked, this, &PreferenceWidget::generateRandomCode);
+    QHBoxLayout* hLayout2 = new QHBoxLayout;
+    hLayout2->addWidget(privateCodeLabel);
+    hLayout2->addWidget(m_privateCodeLineEdit);
+    hLayout2->addWidget(generateBtn);
+    QVBoxLayout* vLayout1 = new QVBoxLayout(privateGroupBox);
+    vLayout1->addLayout(hLayout2);
+    vLayout1->addWidget(tipLabel);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(behaviorWidget);
+    mainLayout->addWidget(systemTrayGroupBox);
+    mainLayout->addWidget(privateGroupBox);
+
+    return behaviorWidget;
 }

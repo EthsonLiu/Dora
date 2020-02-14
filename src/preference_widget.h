@@ -23,6 +23,12 @@
 #include <src/config.h>
 
 #include <QWidget>
+#include <QString>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QTabWidget>
+#include <QLineEdit>
 
 class PreferenceWidget : public QWidget
 {
@@ -32,9 +38,25 @@ public:
 
     PreferenceWidget(QWidget* parent = nullptr);
 
+private slots:
+
+    void updateSizes(int index);
+    void generateRandomCode();
+
 private:
 
     QWidget* createGeneralWidget();
+    QWidget* createBehaviorWidget();
+
+private:
+
+    QTabWidget* m_tabWidget;
+    QSpinBox* m_broadcastPortSpinBox;
+    QSpinBox* m_tranferPortSpinBox;
+    QSpinBox* m_historySavedDaysSpinBox;
+    QComboBox* m_langComboBox;
+    QCheckBox* m_enableMessageCheckBox;
+    QLineEdit* m_privateCodeLineEdit;
 
 };
 
