@@ -29,6 +29,13 @@
 #include <QCheckBox>
 #include <QTabWidget>
 #include <QLineEdit>
+#include <QGroupBox>
+
+enum class Lang
+{
+    english,
+    simplifiedChinese
+};
 
 class PreferenceWidget : public QWidget
 {
@@ -37,6 +44,13 @@ class PreferenceWidget : public QWidget
 public:
 
     PreferenceWidget(QWidget* parent = nullptr);
+
+    inline int     getBroadcastPort()         const { return m_broadcastPortSpinBox->value(); }
+    inline int     getTranferPort()           const { return m_tranferPortSpinBox->value(); }
+    inline Lang    getLanguage()              const { return static_cast<Lang>(m_langComboBox->currentIndex()); }
+    inline int     getMaxDaysOfHistorySaved() const { return m_historySavedDaysSpinBox->value(); }
+    inline bool    isBalloonMessagesEnabled() const { return m_enableMessageCheckBox->isChecked(); }
+    inline QString gePrivateCode()            const { return (m_privateGroupBox->isChecked() == true) ? m_privateCodeLineEdit->text(): ""; }
 
 private slots:
 
@@ -51,12 +65,13 @@ private:
 private:
 
     QTabWidget* m_tabWidget;
-    QSpinBox* m_broadcastPortSpinBox;
-    QSpinBox* m_tranferPortSpinBox;
-    QSpinBox* m_historySavedDaysSpinBox;
-    QComboBox* m_langComboBox;
-    QCheckBox* m_enableMessageCheckBox;
-    QLineEdit* m_privateCodeLineEdit;
+    QSpinBox*   m_broadcastPortSpinBox;
+    QSpinBox*   m_tranferPortSpinBox;
+    QSpinBox*   m_historySavedDaysSpinBox;
+    QComboBox*  m_langComboBox;
+    QCheckBox*  m_enableMessageCheckBox;
+    QLineEdit*  m_privateCodeLineEdit;
+    QGroupBox*  m_privateGroupBox;
 
 };
 

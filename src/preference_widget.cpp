@@ -19,7 +19,6 @@
 
 #include "src/preference_widget.h"
 
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
@@ -139,29 +138,30 @@ QWidget* PreferenceWidget::createBehaviorWidget()
     hLayout1->addWidget(m_enableMessageCheckBox);
     hLayout1->addStretch();
 
-    QGroupBox* privateGroupBox     = new QGroupBox(tr("Enable Private LAN"), behaviorWidget);
-    QLabel* privateCodeLabel       = new QLabel(tr("Private code:"), privateGroupBox);
-    m_privateCodeLineEdit          = new QLineEdit(privateGroupBox);
-    QPushButton* generateBtn       = new QPushButton(tr("Generate"), privateGroupBox);
+    m_privateGroupBox     = new QGroupBox(tr("Enable Private LAN"), behaviorWidget);
+    QLabel* privateCodeLabel       = new QLabel(tr("Private code:"), m_privateGroupBox);
+    m_privateCodeLineEdit          = new QLineEdit(m_privateGroupBox);
+    QPushButton* generateBtn       = new QPushButton(tr("Generate"), m_privateGroupBox);
     QRegExpValidator* regValidator = new QRegExpValidator(QRegExp("[A-Za-z0-9]{8}"), m_privateCodeLineEdit);
-    QLabel* tipLabel               = new QLabel(tr("*This allows people with the same private code to form a private LAN with you."), privateGroupBox);
+    QLabel* tipLabel               = new QLabel(tr("*This allows people with the same private code to form a private LAN with you."),
+                                                m_privateGroupBox);
     m_privateCodeLineEdit->setValidator(regValidator);
     m_privateCodeLineEdit->setPlaceholderText(tr("only support 8 digits or letters"));
-    privateGroupBox->setCheckable(true);
-    privateGroupBox->setChecked(false);
+    m_privateGroupBox->setCheckable(true);
+    m_privateGroupBox->setChecked(false);
     tipLabel->setEnabled(false);
     connect(generateBtn, &QPushButton::clicked, this, &PreferenceWidget::generateRandomCode);
     QHBoxLayout* hLayout2 = new QHBoxLayout;
     hLayout2->addWidget(privateCodeLabel);
     hLayout2->addWidget(m_privateCodeLineEdit);
     hLayout2->addWidget(generateBtn);
-    QVBoxLayout* vLayout1 = new QVBoxLayout(privateGroupBox);
+    QVBoxLayout* vLayout1 = new QVBoxLayout(m_privateGroupBox);
     vLayout1->addLayout(hLayout2);
     vLayout1->addWidget(tipLabel);
 
     QVBoxLayout* mainLayout = new QVBoxLayout(behaviorWidget);
     mainLayout->addWidget(systemTrayGroupBox);
-    mainLayout->addWidget(privateGroupBox);
+    mainLayout->addWidget(m_privateGroupBox);
 
     return behaviorWidget;
 }
