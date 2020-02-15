@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef ABOUTWIDGET_H
-#define ABOUTWIDGET_H
+#ifndef SRC_ABOUT_WIDGET_H
+#define SRC_ABOUT_WIDGET_H
 
 #include "src/config.h"
 
@@ -33,4 +33,4 @@ public:
     AboutWidget(QWidget* parent = nullptr);
 };
 
-#endif // ABOUTWIDGET_H
+#endif /** SRC_ABOUT_WIDGET_H */
