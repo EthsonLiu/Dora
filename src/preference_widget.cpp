@@ -29,6 +29,8 @@
 #include <QRandomGenerator>
 #include <QRegExpValidator>
 #include <QRegExp>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 PreferenceWidget::PreferenceWidget(QWidget* parent) : QWidget(parent)
 {
@@ -78,6 +80,16 @@ void PreferenceWidget::generateRandomCode()
     m_privateCodeLineEdit->setText(code);
 }
 
+void PreferenceWidget::selectFileStorageDir()
+{
+    QString storageDir = QFileDialog::getExistingDirectory(this,
+                                                           tr("Select Directory"),
+                                                           m_fileStorageLineEdit->text(),
+                                                           QFileDialog::ShowDirsOnly);
+    if (storageDir.isEmpty() == false)
+        m_fileStorageLineEdit->setText(storageDir);
+}
+
 QWidget* PreferenceWidget::createGeneralWidget()
 {
     QWidget* generalWidget = new QWidget;
@@ -119,10 +131,22 @@ QWidget* PreferenceWidget::createGeneralWidget()
     hLayout3->addWidget(m_historySavedDaysSpinBox);
     hLayout3->addStretch();
 
+    QGroupBox*   fileStorageGroupBox = new QGroupBox(tr("File Storage"), generalWidget);
+    QLabel*      pathLabel           = new QLabel(tr("Path:"), fileStorageGroupBox);
+    QPushButton* selectBtn           = new QPushButton(tr("Select"), fileStorageGroupBox);
+    m_fileStorageLineEdit            = new QLineEdit(fileStorageGroupBox);
+    m_fileStorageLineEdit->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+    connect(selectBtn, &QPushButton::clicked, this, &PreferenceWidget::selectFileStorageDir);
+    QHBoxLayout* hLayout4 = new QHBoxLayout(fileStorageGroupBox);
+    hLayout4->addWidget(pathLabel);
+    hLayout4->addWidget(m_fileStorageLineEdit);
+    hLayout4->addWidget(selectBtn);
+
     QVBoxLayout* vLayout1 = new QVBoxLayout(generalWidget);
     vLayout1->addWidget(portGroupBox);
     vLayout1->addWidget(langGroupBox);
     vLayout1->addWidget(historyGroupBox);
+    vLayout1->addWidget(fileStorageGroupBox);
 
     return generalWidget;
 }
@@ -138,7 +162,7 @@ QWidget* PreferenceWidget::createBehaviorWidget()
     hLayout1->addWidget(m_enableMessageCheckBox);
     hLayout1->addStretch();
 
-    m_privateGroupBox     = new QGroupBox(tr("Enable Private LAN"), behaviorWidget);
+    m_privateGroupBox              = new QGroupBox(tr("Enable Private LAN"), behaviorWidget);
     QLabel* privateCodeLabel       = new QLabel(tr("Private code:"), m_privateGroupBox);
     m_privateCodeLineEdit          = new QLineEdit(m_privateGroupBox);
     QPushButton* generateBtn       = new QPushButton(tr("Generate"), m_privateGroupBox);

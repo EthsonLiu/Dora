@@ -50,12 +50,14 @@ public:
     inline Lang    getLanguage()              const { return static_cast<Lang>(m_langComboBox->currentIndex()); }
     inline int     getMaxDaysOfHistorySaved() const { return m_historySavedDaysSpinBox->value(); }
     inline bool    isBalloonMessagesEnabled() const { return m_enableMessageCheckBox->isChecked(); }
-    inline QString gePrivateCode()            const { return (m_privateGroupBox->isChecked() == true) ? m_privateCodeLineEdit->text(): ""; }
+    inline QString getPrivateCode()           const { return (m_privateGroupBox->isChecked() == true) ? m_privateCodeLineEdit->text(): ""; }
+    inline QString getFileStorageDir()        const { return m_fileStorageLineEdit->text(); }
 
 private slots:
 
     void updateSizes(int index);
     void generateRandomCode();
+    void selectFileStorageDir();
 
 private:
 
@@ -71,6 +73,7 @@ private:
     QComboBox*  m_langComboBox;
     QCheckBox*  m_enableMessageCheckBox;
     QLineEdit*  m_privateCodeLineEdit;
+    QLineEdit*  m_fileStorageLineEdit;
     QGroupBox*  m_privateGroupBox;
 
 };
