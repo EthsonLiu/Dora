@@ -20,7 +20,7 @@
 #ifndef SRC_PREFERENCE_WIDGET_H
 #define SRC_PREFERENCE_WIDGET_H
 
-#include <src/config.h>
+#include "src/config.h"
 
 #include <QWidget>
 #include <QString>
@@ -30,6 +30,7 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QGroupBox>
+#include <QCloseEvent>
 
 enum class Lang
 {
@@ -45,19 +46,19 @@ public:
 
     PreferenceWidget(QWidget* parent = nullptr);
 
-    inline int     getBroadcastPort()         const { return m_broadcastPortSpinBox->value(); }
-    inline int     getTranferPort()           const { return m_tranferPortSpinBox->value(); }
-    inline Lang    getLanguage()              const { return static_cast<Lang>(m_langComboBox->currentIndex()); }
-    inline int     getMaxDaysOfHistorySaved() const { return m_historySavedDaysSpinBox->value(); }
-    inline bool    isBalloonMessagesEnabled() const { return m_enableMessageCheckBox->isChecked(); }
-    inline QString getPrivateCode()           const { return (m_privateGroupBox->isChecked() == true) ? m_privateCodeLineEdit->text(): ""; }
-    inline QString getFileStorageDir()        const { return m_fileStorageLineEdit->text(); }
+protected:
+
+    void closeEvent(QCloseEvent* event) override;
 
 private slots:
 
     void updateSizes(int index);
     void generateRandomCode();
     void selectFileStorageDir();
+
+signals:
+
+    void preferenceIniSaved();
 
 private:
 

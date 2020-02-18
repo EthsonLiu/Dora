@@ -18,6 +18,7 @@
  */
 
 #include "src/preference_widget.h"
+#include "src/project.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -31,6 +32,9 @@
 #include <QRegExp>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QFile>
+#include <QTextStream>
+#include <QSettings>
 
 PreferenceWidget::PreferenceWidget(QWidget* parent) : QWidget(parent)
 {
@@ -44,6 +48,26 @@ PreferenceWidget::PreferenceWidget(QWidget* parent) : QWidget(parent)
 
     QHBoxLayout* hLayout = new QHBoxLayout(this);
     hLayout->addWidget(m_tabWidget);
+}
+
+void PreferenceWidget::closeEvent(QCloseEvent* event)
+{
+    {
+        QSettings setting(Project::getApplicationPreferenceIniPath(), QSettings::IniFormat);
+
+        setting.setValue("udp_port",                m_broadcastPortSpinBox->value());
+        setting.setValue("tcp_port",                m_tranferPortSpinBox->value());
+        setting.setValue("lang",                    m_langComboBox->currentIndex());
+        setting.setValue("history_record_days",     m_historySavedDaysSpinBox->value());
+        setting.setValue("file_storage_path",       m_fileStorageLineEdit->text());
+        setting.setValue("balloon_message_enabled", m_enableMessageCheckBox->isChecked());
+        setting.setValue("private_lan_enabled",     m_privateGroupBox->isChecked());
+        setting.setValue("private_code",            m_privateCodeLineEdit->text());
+    }
+
+    emit preferenceIniSaved();
+
+    event->accept();
 }
 
 void PreferenceWidget::updateSizes(int index)
@@ -136,6 +160,7 @@ QWidget* PreferenceWidget::createGeneralWidget()
     QPushButton* selectBtn           = new QPushButton(tr("Select"), fileStorageGroupBox);
     m_fileStorageLineEdit            = new QLineEdit(fileStorageGroupBox);
     m_fileStorageLineEdit->setText(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+    m_fileStorageLineEdit->setFocusPolicy(Qt::NoFocus);
     connect(selectBtn, &QPushButton::clicked, this, &PreferenceWidget::selectFileStorageDir);
     QHBoxLayout* hLayout4 = new QHBoxLayout(fileStorageGroupBox);
     hLayout4->addWidget(pathLabel);
