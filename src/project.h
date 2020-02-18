@@ -29,8 +29,10 @@ class Project
 {
 public:
 
-    static QString applicationVersion();
-    static QString applicationReleasedDate();
+    static QString getApplicationVersion();
+    static QString getApplicationReleasedDate();
+    static QString getApplicationDirPath();
+    static QString getApplicationPreferenceIniPath();
 };
 
 #endif /** SRC_PROJECT_H */

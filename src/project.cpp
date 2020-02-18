@@ -17,16 +17,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-
 #include "src/project.h"
 
+#include <QCoreApplication>
 
-QString Project::applicationVersion()
+QString Project::getApplicationVersion()
 {
     return "7.0.0";
 }
 
-QString Project::applicationReleasedDate()
+QString Project::getApplicationReleasedDate()
 {
     return "2020.02.02";
+}
+
+QString Project::getApplicationDirPath()
+{
+    return QCoreApplication::applicationDirPath();
+}
+
+QString Project::getApplicationPreferenceIniPath()
+{
+    return Project::getApplicationDirPath() + "/preference.ini";
 }
