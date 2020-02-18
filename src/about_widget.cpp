@@ -53,8 +53,8 @@ AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
 
     QLabel* versionLabel = new QLabel(QString(tr("Version")) +
                                       QString(" %1 (%2)").
-                                      arg(Project::applicationVersion()).
-                                      arg(Project::applicationReleasedDate()),
+                                      arg(Project::getApplicationVersion()).
+                                      arg(Project::getApplicationReleasedDate()),
                                       this);
     QLabel* websiteLabel = new QLabel(QString(tr("Website")) + " <a href=\"https://github.com/ethsonliu/dukto\">https://github.com/ethsonliu/dukto</a>");
     websiteLabel->setTextFormat(Qt::RichText);
