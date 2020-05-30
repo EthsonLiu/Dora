@@ -8,7 +8,7 @@ CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-TARGET = dora
+TARGET = Dora
 
 #mac:ICON = image/dora.icns
 #win32:RC_ICONS = image/dora.ico
