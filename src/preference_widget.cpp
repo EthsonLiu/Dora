@@ -118,7 +118,7 @@ QWidget* PreferenceWidget::createGeneralWidget()
 {
     QWidget* generalWidget = new QWidget;
 
-    QGroupBox* portGroupBox    = new QGroupBox(tr("Port"), generalWidget);
+    QGroupBox* portGroupBox    = new QGroupBox(tr("Port (Restart required)"), generalWidget);
     QLabel* broadcastPortLabel = new QLabel(tr("Broadcast port:"), portGroupBox);
     QLabel* tranferPortLabel   = new QLabel(tr("Tranfer port:"), portGroupBox);
     m_broadcastPortSpinBox     = new QSpinBox(portGroupBox);
