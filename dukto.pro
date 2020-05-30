@@ -1,6 +1,6 @@
 include(src/qtsingleapplication/qtsingleapplication.pri)
 
-QT += core gui
+QT += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,6 +14,8 @@ mac:ICON = image/dukto.icns
 win32:RC_ICONS = image/dukto.ico
 unix:RC_ICONS = image/dukto.ico
 
+LIBS += -framework CoreServices
+
 SOURCES += \
     src/about_widget.cpp \
     src/dukto_widget.cpp \
@@ -21,7 +23,9 @@ SOURCES += \
     src/preference_widget.cpp \
     src/project.cpp \
     src/system_tray_widget.cpp \
-    src/updates_checking_widget.cpp
+    src/updates_checking_widget.cpp \
+    src/dukto_protocol.cpp \
+    src/platform.cpp
 
 HEADERS += \
     src/about_widget.h \
@@ -30,7 +34,9 @@ HEADERS += \
     src/preference_widget.h \
     src/project.h \
     src/system_tray_widget.h \
-    src/updates_checking_widget.h
+    src/updates_checking_widget.h \
+    src/dukto_protocol.h \
+    src/platform.h
 
 RESOURCES += \
     image/image.qrc
