@@ -1,7 +1,7 @@
-#include "about_widget.h"
-#include "updates_checking_widget.h"
-#include "system_tray_widget.h"
-#include "dukto_widget.h"
+#include "src/about_widget.h"
+#include "src/updates_checking_widget.h"
+#include "src/system_tray_widget.h"
+#include "src/dora_widget.h"
 
 #include <QApplication>
 #include <QtSingleApplication>
@@ -21,13 +21,13 @@ int main(int argc, char *argv[])
     AboutWidget aboutWidget;
     UpdatesCheckingWidget updatesCheckingWidget;
     SystemTrayWidget systemTrayWidget;
-    DuktoWidget duktoWidget;
+    DoraWidget doraWidget;
 
     QObject::connect(&systemTrayWidget, &SystemTrayWidget::showAboutSignal, &aboutWidget, &AboutWidget::show);
     QObject::connect(&systemTrayWidget, &SystemTrayWidget::showUpdatesCheckingSignal, &updatesCheckingWidget, &UpdatesCheckingWidget::show);
-    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showPreferenceSignal, &duktoWidget, &DuktoWidget::showPreferenceWidget);
+    QObject::connect(&systemTrayWidget, &SystemTrayWidget::showPreferenceSignal, &doraWidget, &DoraWidget::showPreferenceWidget);
 
-    duktoWidget.show();
+    doraWidget.show();
 
     return a.exec();
 }

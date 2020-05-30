@@ -1,23 +1,4 @@
-/**
- * DUKTO - A simple, fast and multi-platform file transfer tool for LAN users
- * Copyright (C) 2011 Emanuele Colombo
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
-
-#include "src/dukto_protocol.h"
+#include "src/dora_protocol.h"
 #include "src/project.h"
 #include "src/platform.h"
 
@@ -25,16 +6,21 @@
 #include <QSettings>
 #include <QByteArray>
 
-DuktoProtocol::DuktoProtocol(QObject* parent) : QObject(parent)
+DoraProtocol::DoraProtocol(QObject* parent) : QObject(parent)
 {
     m_udpServerSocket = new QUdpSocket(this);
     m_udpClientSocket = new QUdpSocket(this);
     m_tcpServer       = new QTcpServer(this);
 
+    m_hello.append(0x01);
+    m_hello.append("");
+    m_goodbye.append(0x03);
+    m_goodbye.append("Bye Bye");
+
     initializeFromPreferenceIni();
 }
 
-QString DuktoProtocol::getSystemSignature()
+QString DoraProtocol::getSystemSignature()
 {
     static QString signature;
 
@@ -46,7 +32,7 @@ QString DuktoProtocol::getSystemSignature()
     return signature;
 }
 
-void DuktoProtocol::handleDatagrams(const QByteArray& data, QHostAddress& sender)
+void DoraProtocol::handleDatagrams(const QByteArray& data, QHostAddress& sender)
 {
     int type = static_cast<int>(data[0]);
 
@@ -60,14 +46,15 @@ void DuktoProtocol::handleDatagrams(const QByteArray& data, QHostAddress& sender
     {
         break;
     }
-    default:
-    {
-        qDebug() << QString("unknown type 0x%1.").arg(type, 2, 16, QLatin1Char('0'));
-    }
     }
 }
 
-void DuktoProtocol::initializeFromPreferenceIni()
+void DoraProtocol::sayHello()
+{
+    m_udpServerSocket->writeDatagram(QByteArray(), QHostAddress::Broadcast, m_udpPort);
+}
+
+void DoraProtocol::initializeFromPreferenceIni()
 {
     QSettings setting(Project::getApplicationPreferenceIniPath(), QSettings::IniFormat);
 
@@ -79,8 +66,8 @@ void DuktoProtocol::initializeFromPreferenceIni()
         m_udpPort = setting.value("udp_port").toInt();
         m_tcpPort = setting.value("tcp_port").toInt();
 
-        m_udpServerSocket->bind(static_cast<quint16>(m_udpPort));
-        connect(m_udpServerSocket, &QUdpSocket::readyRead, this, &DuktoProtocol::newUdpDatagrams);
+        m_udpClientSocket->bind(static_cast<quint16>(m_udpPort), QUdpSocket::ShareAddress);
+        connect(m_udpClientSocket, &QUdpSocket::readyRead, this, &DoraProtocol::newUdpDatagrams);
     }
 
     {
@@ -97,15 +84,15 @@ void DuktoProtocol::initializeFromPreferenceIni()
     }
 }
 
-void DuktoProtocol::newUdpDatagrams()
+void DoraProtocol::newUdpDatagrams()
 {
-    while (m_udpServerSocket->hasPendingDatagrams())
+    while (m_udpClientSocket->hasPendingDatagrams())
     {
         QHostAddress sender;
         QByteArray datagram;
 
-        datagram.resize(static_cast<int>(m_udpServerSocket->pendingDatagramSize()));
-        int size = static_cast<int>(m_udpServerSocket->readDatagram(datagram.data(),
+        datagram.resize(static_cast<int>(m_udpClientSocket->pendingDatagramSize()));
+        int size = static_cast<int>(m_udpClientSocket->readDatagram(datagram.data(),
                                                                     static_cast<qint64>(datagram.size()),
                                                                     &sender));
         datagram.resize(size);

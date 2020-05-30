@@ -1,22 +1,3 @@
-/**
- * DUKTO - A simple, fast and multi-platform file transfer tool for LAN users
- * Copyright (C) 2011 Emanuele Colombo
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
-
 #include "src/about_widget.h"
 #include "src/project.h"
 
@@ -28,21 +9,32 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QSvgRenderer>
+#include <QPainter>
 
 AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
 {
     setWindowTitle(tr("About"));
 
     QLabel* logoLabel = new QLabel(this);
-    logoLabel->setPixmap(QPixmap(":/dukto.ico").scaled(80, 80));
+    logoLabel->setPixmap(QPixmap(":/dora.ico").scaled(80, 80));
 
-    QLabel* titleLabel = new QLabel("Dukto", this);
+    QLabel* titleLabel = new QLabel("Dora", this);
     QFont titleFont;
     titleFont.setPointSize(23);
     titleLabel->setFont(titleFont);
 
     QLabel* builtWithQtLabel = new QLabel(this);
-    builtWithQtLabel->setPixmap(QPixmap(":/built_with_qt.png").scaled(200, 60));
+//    QSvgRenderer* svgRender = new QSvgRenderer();
+//    svgRender->load(QString(":/built_with_qt.svg"));
+//    QPixmap pixmap(120, 30);
+//    pixmap.fill(Qt::transparent);
+//    QPainter painter(&pixmap);
+//    svgRender->render(&painter);
+    builtWithQtLabel->setPixmap(QPixmap(":/built_with_qt.png").scaled(120, 30,
+                                                                      Qt::
+                                                                      KeepAspectRatio,
+                                                                      Qt::SmoothTransformation));
 
     QHBoxLayout* hLayout1 = new QHBoxLayout;
     hLayout1->addWidget(logoLabel);
@@ -56,10 +48,10 @@ AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
                                       arg(Project::getApplicationVersion()).
                                       arg(Project::getApplicationReleasedDate()),
                                       this);
-    QLabel* websiteLabel = new QLabel(QString(tr("Website")) + " <a href=\"https://github.com/ethsonliu/dukto\">https://github.com/ethsonliu/dukto</a>");
+    QLabel* websiteLabel = new QLabel(QString(tr("Website")) + " <a href=\"https://github.com/ethsonliu/dora\">https://github.com/ethsonliu/dora</a>");
     websiteLabel->setTextFormat(Qt::RichText);
     websiteLabel->setOpenExternalLinks(true);
-    QLabel* authorsLabel = new QLabel(tr("Created by Emanuele Colombo, maintained by Ethson Liu."));
+    QLabel* authorsLabel = new QLabel(tr("Created by Ethson Liu."));
 
     QHBoxLayout* hLayout2 = new QHBoxLayout;
     hLayout2->addWidget(websiteLabel);
