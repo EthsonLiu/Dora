@@ -7,7 +7,7 @@
 SystemTrayWidget::SystemTrayWidget(QWidget* parent) : QWidget(parent)
 {
     m_systemTrayIcon = new QSystemTrayIcon(this);
-    m_systemTrayIcon->setIcon(QIcon(":/dora.ico"));
+    m_systemTrayIcon->setIcon(QIcon(":/dora.png"));
     connect(m_systemTrayIcon, &QSystemTrayIcon::activated, this, &SystemTrayWidget::systemTrayIconActivated);
     m_systemTrayIcon->show();
 
