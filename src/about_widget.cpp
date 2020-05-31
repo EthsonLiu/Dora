@@ -9,12 +9,12 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QDesktopServices>
-#include <QSvgRenderer>
-#include <QPainter>
+#include <QDateTime>
 
 AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
 {
     setWindowTitle(tr("About"));
+    setFixedSize(650, 300);
 
     QLabel* logoLabel = new QLabel(this);
     logoLabel->setPixmap(QPixmap(":/dora.ico").scaled(80, 80));
@@ -24,24 +24,10 @@ AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
     titleFont.setPointSize(23);
     titleLabel->setFont(titleFont);
 
-    QLabel* builtWithQtLabel = new QLabel(this);
-//    QSvgRenderer* svgRender = new QSvgRenderer();
-//    svgRender->load(QString(":/built_with_qt.svg"));
-//    QPixmap pixmap(120, 30);
-//    pixmap.fill(Qt::transparent);
-//    QPainter painter(&pixmap);
-//    svgRender->render(&painter);
-    builtWithQtLabel->setPixmap(QPixmap(":/built_with_qt.png").scaled(120, 30,
-                                                                      Qt::
-                                                                      KeepAspectRatio,
-                                                                      Qt::SmoothTransformation));
-
     QHBoxLayout* hLayout1 = new QHBoxLayout;
     hLayout1->addWidget(logoLabel);
     hLayout1->addWidget(titleLabel);
     hLayout1->addStretch();
-    hLayout1->addSpacing(300);
-    hLayout1->addWidget(builtWithQtLabel);
 
     QLabel* versionLabel = new QLabel(QString(tr("Version")) +
                                       QString(" %1 (%2)").
@@ -51,7 +37,10 @@ AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
     QLabel* websiteLabel = new QLabel(QString(tr("Website")) + " <a href=\"https://github.com/ethsonliu/dora\">https://github.com/ethsonliu/dora</a>");
     websiteLabel->setTextFormat(Qt::RichText);
     websiteLabel->setOpenExternalLinks(true);
-    QLabel* authorsLabel = new QLabel(tr("Created by Ethson Liu."));
+    QString personalInfo = "";
+    QLabel* authorsLabel = new QLabel(QString(tr("Copyright")) +
+                                      QString(" 2020-%1, ").arg(QDateTime::currentDateTime().toString("yyyy")) +
+                                      QString(tr("created by Ethson Liu.")));
 
     QHBoxLayout* hLayout2 = new QHBoxLayout;
     hLayout2->addWidget(websiteLabel);
