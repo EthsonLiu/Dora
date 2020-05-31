@@ -1,4 +1,3 @@
-
 #ifndef SRC_PLATFORM_H
 #define SRC_PLATFORM_H
 
@@ -12,7 +11,6 @@ public:
 
     static QString getSystemUsername();
     static QString getPlatformName();
-    static QString getSystemUserAvatarPath();
 };
 
 #endif /** SRC_PLATFORM_H */
