@@ -17,7 +17,7 @@ AboutWidget::AboutWidget(QWidget* parent) : QWidget(parent)
     setFixedSize(650, 300);
 
     QLabel* logoLabel = new QLabel(this);
-    logoLabel->setPixmap(QPixmap(":/dora.ico").scaled(80, 80));
+    logoLabel->setPixmap(QPixmap(":/dora.png").scaled(40, 40));
 
     QLabel* titleLabel = new QLabel("Dora", this);
     QFont titleFont;

@@ -10,9 +10,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 TARGET = Dora
 
-#mac:ICON = image/dora.icns
-#win32:RC_ICONS = image/dora.ico
-#unix:RC_ICONS = image/dora.ico
+mac:ICON = image/dora.icns
+win32:RC_ICONS = image/dora.ico
+unix:RC_ICONS = image/dora.ico
 
 LIBS += -framework CoreServices
 

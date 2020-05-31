@@ -5,7 +5,7 @@
 DoraWidget::DoraWidget(QWidget* parent) : QWidget(parent)
 {
     setWindowTitle("Dora");
-    setWindowIcon(QIcon(":/Dora.ico"));
+    setWindowIcon(QIcon(":/dora.png"));
 
     connect(&m_preferenceWidget, &PreferenceWidget::preferenceIniSaved,
             &m_doraProtocol, &DoraProtocol::initializeFromPreferenceIni);
