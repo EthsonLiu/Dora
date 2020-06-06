@@ -19,11 +19,10 @@ class DoraProtocol : public QObject
 public:
 
     explicit DoraProtocol(QObject* parent = nullptr);
-    QString getSystemSignature();
 
 private:
 
-    void handleDatagrams(const QByteArray& data, QHostAddress& sender);
+    void handleDatagrams(const QByteArray& data, const QHostAddress& sender);
     void sayHello();
 
 public slots:
@@ -36,11 +35,15 @@ private slots:
 
 private:
 
+    const QString        kHello;
+    const QString        kSplitter;
+    const int            kBroadcastInterval;
+    const int            kCheckInteval;
+
     int                  m_udpPort;
     int                  m_tcpPort;
 
     QByteArray           m_hello;
-    QByteArray           m_goodbye;
 
     QAtomicInteger<bool> m_isBalloonMessageEnabled;
 

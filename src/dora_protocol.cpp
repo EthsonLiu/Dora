@@ -5,53 +5,52 @@
 #include <QMutexLocker>
 #include <QSettings>
 #include <QByteArray>
+#include <QStringList>
 
-DoraProtocol::DoraProtocol(QObject* parent) : QObject(parent)
+DoraProtocol::DoraProtocol(QObject* parent) :
+    QObject(parent),
+    kHello("dora hello"),
+    kSplitter(",|"),
+    kBroadcastInterval(1500),
+    kCheckInteval(kBroadcastInterval * 3)
 {
     m_udpServerSocket = new QUdpSocket(this);
     m_udpClientSocket = new QUdpSocket(this);
     m_tcpServer       = new QTcpServer(this);
 
-    m_hello.append(0x01);
-    m_hello.append("");
-    m_goodbye.append(0x03);
-    m_goodbye.append("Bye Bye");
+    m_hello.append(kHello);
+    m_hello.append(kSplitter);
+    m_hello.append(Platform::getPlatformName());
+    m_hello.append(kSplitter);
+    m_hello.append(Platform::getSystemUsername());
+    m_hello.append(kSplitter);
 
     initializeFromPreferenceIni();
 }
 
-QString DoraProtocol::getSystemSignature()
+void DoraProtocol::handleDatagrams(const QByteArray& data, const QHostAddress& sender)
 {
-    static QString signature;
-
-    if (signature.isEmpty() == false)
-        return signature;
-
-    signature = Platform::getSystemUsername();
-
-    return signature;
-}
-
-void DoraProtocol::handleDatagrams(const QByteArray& data, QHostAddress& sender)
-{
-    int type = static_cast<int>(data[0]);
-
-    switch (type)
+    QStringList strList = QString(data.data()).split(kSplitter);
+    if (strList.size() >= 4)
     {
-    case 0x01: /** broadcast */
-    {
-        break;
-    }
-    case 0x03: /** goodbye */
-    {
-        break;
-    }
+        if (strList[0] == kHello)
+        {
+
+        }
     }
 }
 
 void DoraProtocol::sayHello()
 {
-    m_udpServerSocket->writeDatagram(QByteArray(), QHostAddress::Broadcast, m_udpPort);
+    QByteArray packet;
+    packet.append(m_hello);
+
+    {
+        QMutexLocker locker(&m_privateCodeMutex);
+        packet.append(m_privateCode);
+    }
+
+    m_udpServerSocket->writeDatagram(packet, QHostAddress::Broadcast, static_cast<quint16>(m_udpPort));
 }
 
 void DoraProtocol::initializeFromPreferenceIni()
