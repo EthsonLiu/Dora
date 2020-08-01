@@ -11,6 +11,20 @@
 #include <QTcpSocket>
 #include <QAtomicInteger>
 #include <QMutex>
+#include <QMap>
+
+struct Peer
+{
+    QString username;
+    QString platform;
+    uint64_t latestUpdatedTime;
+};
+
+enum class PeerOperation
+{
+    remove,
+    add
+};
 
 class DoraProtocol : public QObject
 {
@@ -19,11 +33,15 @@ class DoraProtocol : public QObject
 public:
 
     explicit DoraProtocol(QObject* parent = nullptr);
+    void init();
+
+signals:
+
+    void peerChanged(QString& peerIP, const Peer& peer, PeerOperation);
 
 private:
 
     void handleDatagrams(const QByteArray& data, const QHostAddress& sender);
-    void sayHello();
 
 public slots:
 
@@ -31,7 +49,9 @@ public slots:
 
 private slots:
 
+    void sayHello();
     void newUdpDatagrams();
+    void peersCheck();
 
 private:
 
@@ -56,6 +76,9 @@ private:
     QUdpSocket*          m_udpServerSocket;
     QUdpSocket*          m_udpClientSocket;
     QTcpServer*          m_tcpServer;
+
+    QMutex               m_peersMapMutex;
+    QMap<QString, Peer>  m_peersMap;
 
 };
 

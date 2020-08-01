@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QByteArray>
 #include <QStringList>
+#include <QTimer>
 
 DoraProtocol::DoraProtocol(QObject* parent) :
     QObject(parent),
@@ -18,6 +19,8 @@ DoraProtocol::DoraProtocol(QObject* parent) :
     m_udpClientSocket = new QUdpSocket(this);
     m_tcpServer       = new QTcpServer(this);
 
+    m_udpClientSocket->bind(static_cast<quint16>(m_udpPort), QUdpSocket::ShareAddress);
+
     m_hello.append(kHello);
     m_hello.append(kSplitter);
     m_hello.append(Platform::getPlatformName());
@@ -26,6 +29,24 @@ DoraProtocol::DoraProtocol(QObject* parent) :
     m_hello.append(kSplitter);
 
     initializeFromPreferenceIni();
+}
+
+void DoraProtocol::init()
+{
+    /** UDP server */
+    QTimer* timer1 = new QTimer(this);
+    timer1->setInterval(kBroadcastInterval);
+    connect(timer1, &QTimer::timeout, this, &DoraProtocol::sayHello);
+    timer1->start();
+
+    /** UDP client */
+    connect(m_udpClientSocket, &QUdpSocket::readyRead, this, &DoraProtocol::newUdpDatagrams);
+
+    /** peers check */
+    QTimer* timer2 = new QTimer(this);
+    timer2->setInterval(kCheckInteval);
+    connect(timer2, &QTimer::timeout, this, &DoraProtocol::peersCheck);
+    timer2->start();
 }
 
 void DoraProtocol::handleDatagrams(const QByteArray& data, const QHostAddress& sender)
@@ -97,6 +118,11 @@ void DoraProtocol::newUdpDatagrams()
         datagram.resize(size);
 
         handleDatagrams(datagram, sender);
-     }
+    }
+}
+
+void DoraProtocol::peersCheck()
+{
+
 }
 
