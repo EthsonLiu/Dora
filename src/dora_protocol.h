@@ -1,4 +1,4 @@
-#ifndef SRC_DORA_PROTOCOL_H
+﻿#ifndef SRC_DORA_PROTOCOL_H
 #define SRC_DORA_PROTOCOL_H
 
 #include "src/config.h"
@@ -65,7 +65,7 @@ private:
 
     QByteArray           m_hello;
 
-    QAtomicInteger<bool> m_isBalloonMessageEnabled;
+    QAtomicInteger<int>  m_isBalloonMessageEnabled;
 
     QMutex               m_privateCodeMutex;
     QString              m_privateCode;

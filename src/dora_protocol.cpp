@@ -1,4 +1,4 @@
-#include "src/dora_protocol.h"
+﻿#include "src/dora_protocol.h"
 #include "src/project.h"
 #include "src/platform.h"
 
@@ -95,7 +95,7 @@ void DoraProtocol::initializeFromPreferenceIni()
         m_fileStorageDir = setting.value("file_storage_path").toString();
     }
 
-    m_isBalloonMessageEnabled = setting.value("balloon_message_enabled").toBool();
+    m_isBalloonMessageEnabled = setting.value("balloon_message_enabled").toInt();
 
     if (setting.value("private_lan_enabled").toBool())
     {
