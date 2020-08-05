@@ -1,4 +1,4 @@
-#include "src/preference_widget.h"
+﻿#include "src/preference_widget.h"
 #include "src/project.h"
 
 #include <QHBoxLayout>
