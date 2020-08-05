@@ -14,8 +14,6 @@ mac:ICON = image/dora.icns
 win32:RC_ICONS = image/dora.ico
 unix:RC_ICONS = image/dora.ico
 
-LIBS += -framework CoreServices
-
 SOURCES += \
     src/about_widget.cpp \
     src/dora_widget.cpp \
