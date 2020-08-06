@@ -12,7 +12,7 @@ public:
     static QString getApplicationVersion();
     static QString getApplicationReleasedDate();
     static QString getApplicationDirPath();
-    static QString getApplicationPreferenceIniPath();
+    static QString getApplicationPreferenceIniFile();
 };
 
 #endif /** SRC_PROJECT_H */

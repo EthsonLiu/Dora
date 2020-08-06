@@ -76,7 +76,7 @@ void DoraProtocol::sayHello()
 
 void DoraProtocol::initializeFromPreferenceIni()
 {
-    QSettings setting(Project::getApplicationPreferenceIniPath(), QSettings::IniFormat);
+    QSettings setting(Project::getApplicationPreferenceIniFile(), QSettings::IniFormat);
 
     static bool isFirst = true;
     if (isFirst)

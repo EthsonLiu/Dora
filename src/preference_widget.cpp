@@ -34,7 +34,7 @@ PreferenceWidget::PreferenceWidget(QWidget* parent) : QWidget(parent)
 void PreferenceWidget::closeEvent(QCloseEvent* event)
 {
     {
-        QSettings setting(Project::getApplicationPreferenceIniPath(), QSettings::IniFormat);
+        QSettings setting(Project::getApplicationPreferenceIniFile(), QSettings::IniFormat);
 
         setting.setValue("udp_port",                m_broadcastPortSpinBox->value());
         setting.setValue("tcp_port",                m_tranferPortSpinBox->value());
