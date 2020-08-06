@@ -1,4 +1,4 @@
-#include "src/project.h"
+﻿#include "src/project.h"
 
 #include <QCoreApplication>
 
@@ -17,7 +17,7 @@ QString Project::getApplicationDirPath()
     return QCoreApplication::applicationDirPath();
 }
 
-QString Project::getApplicationPreferenceIniPath()
+QString Project::getApplicationPreferenceIniFile()
 {
     return Project::getApplicationDirPath() + "/preference.ini";
 }

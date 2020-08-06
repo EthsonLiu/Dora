@@ -1,4 +1,4 @@
-#ifndef SRC_PROJECT_H
+﻿#ifndef SRC_PROJECT_H
 #define SRC_PROJECT_H
 
 #include "src/config.h"
