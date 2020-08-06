@@ -17,7 +17,7 @@ struct Peer
 {
     QString username;
     QString platform;
-    uint64_t latestUpdatedTime;
+    uint64_t lastUpdatedTime;
 };
 
 enum class PeerOperation
