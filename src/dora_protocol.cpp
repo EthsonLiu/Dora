@@ -13,7 +13,7 @@ DoraProtocol::DoraProtocol(QObject* parent) :
     kHello("dora hello"),
     kSplitter(",|"),
     kBroadcastInterval(1500),
-    kCheckInteval(kBroadcastInterval * 3)
+    kCheckInterval(kBroadcastInterval * 3)
 {
     m_udpServerSocket = new QUdpSocket(this);
     m_udpClientSocket = new QUdpSocket(this);
@@ -44,7 +44,7 @@ void DoraProtocol::init()
 
     /** peers check */
     QTimer* timer2 = new QTimer(this);
-    timer2->setInterval(kCheckInteval);
+    timer2->setInterval(kCheckInterval);
     connect(timer2, &QTimer::timeout, this, &DoraProtocol::peersCheck);
     timer2->start();
 }

@@ -58,7 +58,7 @@ private:
     const QString        kHello;
     const QString        kSplitter;
     const int            kBroadcastInterval;
-    const int            kCheckInteval;
+    const int            kCheckInterval;
 
     int                  m_udpPort;
     int                  m_tcpPort;
