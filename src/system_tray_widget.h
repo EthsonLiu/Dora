@@ -1,4 +1,4 @@
-#ifndef SRC_SYSTEM_TRAY_WIDGET_H
+﻿#ifndef SRC_SYSTEM_TRAY_WIDGET_H
 #define SRC_SYSTEM_TRAY_WIDGET_H
 
 #include "src/config.h"
@@ -6,6 +6,9 @@
 #include <QWidget>
 #include <QSystemTrayIcon>
 
+/**
+ * A widget to show system tray.
+ */
 class SystemTrayWidget : public QWidget
 {
     Q_OBJECT

@@ -1,4 +1,4 @@
-#ifndef SRC_DORA_WIDGET_H
+﻿#ifndef SRC_DORA_WIDGET_H
 #define SRC_DORA_WIDGET_H
 
 #include "src/config.h"
@@ -7,6 +7,9 @@
 
 #include <QWidget>
 
+/**
+ * The main widget.
+ */
 class DoraWidget : public QWidget
 {
     Q_OBJECT

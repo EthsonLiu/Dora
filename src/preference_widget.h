@@ -1,4 +1,4 @@
-#ifndef SRC_PREFERENCE_WIDGET_H
+﻿#ifndef SRC_PREFERENCE_WIDGET_H
 #define SRC_PREFERENCE_WIDGET_H
 
 #include "src/config.h"
@@ -19,6 +19,9 @@ enum class Lang
     simplifiedChinese
 };
 
+/**
+ * A widget to show preference.
+ */
 class PreferenceWidget : public QWidget
 {
     Q_OBJECT
@@ -34,11 +37,19 @@ protected:
 private slots:
 
     void updateSizes(int index);
+
+    /**
+     * To generate 8 random characters.
+     */
     void generateRandomCode();
+
     void selectFileStorageDir();
 
 signals:
 
+    /**
+     * If preference file is changed and resaved, you should emit this signal.
+     */
     void preferenceIniSaved();
 
 private:
