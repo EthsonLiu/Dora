@@ -14,7 +14,7 @@
 #include <QMap>
 
 /**
- * <Peer> infomation.
+ * Peer infomation.
  */
 struct Peer
 {
@@ -24,9 +24,10 @@ struct Peer
 };
 
 /**
- * The operation of <Peer>. <PeerOperation::remove> is meaning
- * the <Peer> is levaing, and <PeerOperation::add> is meaning
- * the <Peer> is coming,
+ * The operation of Peer.
+ *
+ * PeerOperation::remove is meaning the Peer is levaing,
+ * and PeerOperation::add is meaning the Peer is coming。
  */
 enum class PeerOperation
 {
@@ -53,13 +54,13 @@ public:
 signals:
 
     /**
-     * To emit a signal of some <Peer> is leaving or coming.
+     * To emit a signal of some Peer is leaving or coming.
      *
      * @param peerIP
-     *        The IP of <peer>.
+     *        The IP of peer.
      *
      * @param peer
-     *        Which <Peer> is leaving or coming.
+     *        Which Peer is leaving or coming.
      *
      * @param opt
      *        Is leaving or coming?
@@ -69,7 +70,7 @@ signals:
 private:
 
     /**
-     * Handle the UDP message. Parse and check it, and then emit <peerChanged>.
+     * Handle the UDP message. Parse and check it, and then emit peerChanged.
      *
      * @param data
      *        The UDP message.
@@ -108,7 +109,7 @@ private:
     const QString        kHello;
     const QString        kSplitter;
     const int            kBroadcastInterval;
-    const int            kCheckInterval; /** The interval of function <peersCheck> called */
+    const int            kCheckInterval; /** The interval of function peersCheck called */
 
     int                  m_udpPort;
     int                  m_tcpPort;
@@ -128,7 +129,7 @@ private:
     QTcpServer*          m_tcpServer;
 
     /**
-     * The key of <m_peersMap> is the IP of the <Peer>,
+     * The key of m_peersMap is the IP of the Peer,
      * for example, "192.168.70.1".
      */
     QMutex               m_peersMapMutex;
