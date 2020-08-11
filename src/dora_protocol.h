@@ -65,7 +65,7 @@ signals:
      * @param opt
      *        Is leaving or coming?
      */
-    void peerChanged(QString& peerIP, const Peer& peer, PeerOperation opt);
+    void peerChanged(const QString& peerIP, const Peer& peer, PeerOperation opt);
 
 private:
 
