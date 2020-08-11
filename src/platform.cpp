@@ -1,4 +1,4 @@
-#include "src/platform.h"
+﻿#include "src/platform.h"
 
 #include <QtGlobal>
 
@@ -9,12 +9,12 @@ QString Platform::getSystemUsername()
     if (username.isEmpty() == false)
         return username;
 
-    username = getenv("USERNAME");
+    username = QString::fromLocal8Bit(qgetenv("USERNAME"));
 
-    if (username.isEmpty() == false)
-        username = getenv("USER");
+    if (username.isEmpty() == true)
+        username = QString::fromLocal8Bit(qgetenv("USER"));
 
-    if (username.isEmpty() == false)
+    if (username.isEmpty() == true)
         username = "Unknown";
 
     return username;
