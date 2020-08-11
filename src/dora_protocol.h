@@ -20,7 +20,7 @@ struct Peer
 {
     QString username;
     QString platform;
-    uint64_t lastUpdatedTime;
+    uint    lastUpdatedTime;
 };
 
 /**
