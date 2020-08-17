@@ -7,19 +7,20 @@
 #include <QByteArray>
 #include <QStringList>
 #include <QTimer>
+#include <QDateTime>
+#include <QNetworkInterface>
 
 DoraProtocol::DoraProtocol(QObject* parent) :
     QObject(parent),
     kHello("dora hello"),
     kSplitter(",|"),
-    kBroadcastInterval(1500),
-    kCheckInterval(kBroadcastInterval * 3)
+    kBroadcastInterval(3000),
+    kCheckInterval(kBroadcastInterval * 2),
+    kDeadSpan(kBroadcastInterval * 2)
 {
     m_udpServerSocket = new QUdpSocket(this);
     m_udpClientSocket = new QUdpSocket(this);
     m_tcpServer       = new QTcpServer(this);
-
-    m_udpClientSocket->bind(static_cast<quint16>(m_udpPort), QUdpSocket::ShareAddress);
 
     m_hello.append(kHello);
     m_hello.append(kSplitter);
@@ -40,6 +41,7 @@ void DoraProtocol::init()
     timer1->start();
 
     /** UDP client */
+    m_udpClientSocket->bind(static_cast<quint16>(m_udpPort), QUdpSocket::ShareAddress);
     connect(m_udpClientSocket, &QUdpSocket::readyRead, this, &DoraProtocol::newUdpDatagrams);
 
     /** peers check */
@@ -51,14 +53,87 @@ void DoraProtocol::init()
 
 void DoraProtocol::handleDatagrams(const QByteArray& data, const QHostAddress& sender)
 {
+    QString privateCode;
+
+    {
+        QMutexLocker locker(&m_privateCodeMutex);
+        privateCode = m_privateCode;
+    }
+
+    quint32 num = sender.toIPv4Address();
+    QString peerIP = QString("%1.%2.%3.%4").arg((num >> 24) & 0xFF).arg((num >> 16) & 0xFF).arg((num >> 8) & 0xFF).arg(num & 0xFF);
+
     QStringList strList = QString(data.data()).split(kSplitter);
     if (strList.size() >= 4)
     {
-        if (strList[0] == kHello)
+        if (strList[0] == kHello &&
+            strList[3] == privateCode &&
+            isInLocalIPAddresses(peerIP) == false)
         {
+            Peer peer;
+            peer.lastUpdatedTime = QDateTime::currentDateTime().toTime_t();
+            peer.platform = strList[1];
+            peer.username = strList[2];
+            emit peerChanged(peerIP, peer, PeerOperation::add);
 
+#if 1
+            qDebug() << "[DoraProtocol::handleDatagrams]" << peerIP << peer.lastUpdatedTime << peer.platform << peer.username;
+#endif
         }
     }
+}
+
+QList<QHostAddress> DoraProtocol::getAllNICsBroadcastAddresses()
+{
+    QList<QHostAddress> addrsList;
+    QList<QNetworkInterface> interfacesList = QNetworkInterface::allInterfaces();
+    foreach (QNetworkInterface interface, interfacesList)
+    {
+        foreach (QNetworkAddressEntry entry, interface.addressEntries())
+        {
+            QHostAddress addr = entry.broadcast();
+            if (addr != QHostAddress::Null &&
+                entry.ip() != QHostAddress::LocalHost &&
+                entry.ip().protocol() == QAbstractSocket::IPv4Protocol)
+            {
+                addrsList.push_back(addr);
+            }
+        }
+    }
+
+    return addrsList;
+}
+
+QList<QHostAddress> DoraProtocol::getAllNICsIPAddresses()
+{
+    QList<QHostAddress> ipsList;
+    QList<QNetworkInterface> interfacesList = QNetworkInterface::allInterfaces();
+    foreach (QNetworkInterface interface, interfacesList)
+    {
+        foreach (QNetworkAddressEntry entry, interface.addressEntries())
+        {
+            QHostAddress ip = entry.ip();
+            if (ip != QHostAddress::Null &&
+                entry.ip() != QHostAddress::LocalHost &&
+                entry.ip().protocol() == QAbstractSocket::IPv4Protocol)
+            {
+                ipsList.push_back(ip);
+            }
+        }
+    }
+
+    return ipsList;
+}
+
+bool DoraProtocol::isInLocalIPAddresses(const QString &ip)
+{
+    QList<QHostAddress> ipsList = getAllNICsIPAddresses();
+    QHostAddress addr(ip);
+
+    if (ipsList.indexOf(addr) == -1) /** not existed */
+        return false;
+
+    return true;
 }
 
 void DoraProtocol::sayHello()
@@ -70,6 +145,8 @@ void DoraProtocol::sayHello()
         QMutexLocker locker(&m_privateCodeMutex);
         packet.append(m_privateCode);
     }
+
+    /** multi-NIC (NIC is "Network Interface Card") */
 
     m_udpServerSocket->writeDatagram(packet, QHostAddress::Broadcast, static_cast<quint16>(m_udpPort));
 }
@@ -123,6 +200,21 @@ void DoraProtocol::newUdpDatagrams()
 
 void DoraProtocol::peersCheck()
 {
+    QMap<QString, Peer> temp;
 
+    {
+        QMutexLocker locker(&m_peersMapMutex);
+        temp = m_peersMap; /** copy */
+    }
+
+    uint currentTime = QDateTime::currentDateTime().toTime_t();
+    for (auto it = temp.begin(); it != temp.end(); ++it)
+    {
+        QString ip = it.key();
+        Peer peer = it.value();
+
+        if (qAbs(currentTime - peer.lastUpdatedTime) >= kDeadSpan)
+            emit peerChanged(ip, peer, PeerOperation::remove);
+    }
 }
 

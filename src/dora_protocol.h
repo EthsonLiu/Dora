@@ -12,6 +12,8 @@
 #include <QAtomicInteger>
 #include <QMutex>
 #include <QMap>
+#include <QList>
+#include <QHostAddress>
 
 /**
  * Peer infomation.
@@ -80,6 +82,21 @@ private:
      */
     void handleDatagrams(const QByteArray& data, const QHostAddress& sender);
 
+    /**
+     * Get the broadcast addresses of all the NICs.
+     */
+    QList<QHostAddress> getAllNICsBroadcastAddresses();
+
+    /**
+     * Get the IP addresses of all the NICs.
+     */
+    QList<QHostAddress> getAllNICsIPAddresses();
+
+    /**
+     * Whether or not ip is existed in local NIC ips(returned by getAllNICsIPAddresses()).
+     */
+    bool isInLocalIPAddresses(const QString& ip);
+
 public slots:
 
     /**
@@ -109,7 +126,18 @@ private:
     const QString        kHello;
     const QString        kSplitter;
     const int            kBroadcastInterval;
-    const int            kCheckInterval; /** The interval of function peersCheck called */
+
+    /**
+     * The interval of function peersCheck called
+     */
+    const int            kCheckInterval;
+
+    /**
+     * If currentTime - Peer.lastUpdatedTime >= kDeadSpan,
+     * that is to say, the peer has dead, we should remove it
+     * form list.
+     */
+    const int            kDeadSpan;
 
     int                  m_udpPort;
     int                  m_tcpPort;

@@ -1,4 +1,4 @@
-#include "src/dora_widget.h"
+﻿#include "src/dora_widget.h"
 
 #include <QIcon>
 
@@ -9,6 +9,8 @@ DoraWidget::DoraWidget(QWidget* parent) : QWidget(parent)
 
     connect(&m_preferenceWidget, &PreferenceWidget::preferenceIniSaved,
             &m_doraProtocol, &DoraProtocol::initializeFromPreferenceIni);
+
+    m_doraProtocol.init();
 }
 
 void DoraWidget::showPreferenceWidget()
