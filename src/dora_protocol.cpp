@@ -147,8 +147,11 @@ void DoraProtocol::sayHello()
     }
 
     /** multi-NIC (NIC is "Network Interface Card") */
-
-    m_udpServerSocket->writeDatagram(packet, QHostAddress::Broadcast, static_cast<quint16>(m_udpPort));
+    QList<QHostAddress> addrList = getAllNICsBroadcastAddresses();
+    foreach (auto addr, addrList)
+    {
+        m_udpServerSocket->writeDatagram(packet, addr, static_cast<quint16>(m_udpPort));
+    }
 }
 
 void DoraProtocol::initializeFromPreferenceIni()
