@@ -128,7 +128,7 @@ private:
     const int            kBroadcastInterval;
 
     /**
-     * The interval of function peersCheck called
+     * The interval of function peersCheck called.
      */
     const int            kCheckInterval;
 
