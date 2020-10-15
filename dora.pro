@@ -23,7 +23,8 @@ SOURCES += \
     src/system_tray_widget.cpp \
     src/updates_checking_widget.cpp \
     src/dora_protocol.cpp \
-    src/platform.cpp
+    src/platform.cpp \
+    src/peer_widget.cpp
 
 HEADERS += \
     src/about_widget.h \
@@ -34,7 +35,8 @@ HEADERS += \
     src/system_tray_widget.h \
     src/updates_checking_widget.h \
     src/dora_protocol.h \
-    src/platform.h
+    src/platform.h \
+    src/peer_widget.h
 
 RESOURCES += \
     image/image.qrc
